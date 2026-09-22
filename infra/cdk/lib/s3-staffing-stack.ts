@@ -46,7 +46,7 @@ export class S3StaffingStack extends cdk.Stack {
     vpc.addFlowLog('FlowLogs', { destination: ec2.FlowLogDestination.toCloudWatchLogs(new logs.LogGroup(this, 'VpcFlowLogGroup', { retention: logs.RetentionDays.ONE_MONTH, removalPolicy: cdk.RemovalPolicy.DESTROY })) });
 
     const database = new rds.DatabaseCluster(this, 'Database', {
-      engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.of('16.6', '16') }),
+      engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.of('16.14','16') }),
       writer: rds.ClusterInstance.serverlessV2('writer'),
       readers: [rds.ClusterInstance.serverlessV2('reader', { scaleWithWriter: true })],
       serverlessV2MinCapacity: 0.5,
