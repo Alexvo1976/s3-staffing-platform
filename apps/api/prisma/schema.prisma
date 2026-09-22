@@ -67,38 +67,59 @@ model Job {
 }
 
 model Candidate {
-  id           String        @id @default(cuid())
-  firstName    String
-  lastName     String
-  email        String
-  phone        String
-  city         String?
-  state        String?
-  linkedInUrl  String?
-  yearsExp     Int?
-  skills       String[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  applications Application[]
+  id                     String        @id @default(cuid())
+  firstName              String
+  middleName             String?
+  lastName               String
+  email                  String
+  phone                  String
+  streetAddress          String?
+  city                   String?
+  state                  String?
+  zipCode                String?
+  linkedInUrl            String?
+  yearsExp               Int?
+  skills                 String[]
+  licensesCertifications String?
+  highestEducation       String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  applications           Application[]
 
   @@index([email])
 }
 
 model Application {
-  id              String            @id @default(cuid())
-  jobId           String
-  candidateId     String
-  coverLetter     String?
+  id          String  @id @default(cuid())
+  jobId       String
+  candidateId String
+  coverLetter String?
+
   resumeObjectKey String
   resumeFileName  String
-  consentAt       DateTime
-  status          ApplicationStatus @default(NEW)
-  source          String            @default("website")
-  notes           String?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  job             Job               @relation(fields: [jobId], references: [id], onDelete: Restrict)
-  candidate       Candidate         @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+
+  licenseObjectKeys String[] @default([])
+  licenseFileNames  String[] @default([])
+  degreeObjectKeys  String[] @default([])
+  degreeFileNames   String[] @default([])
+
+  placementType        String?
+  partTimeAvailability String?
+  availableStartDate   DateTime?
+
+  backgroundClearance    Boolean?
+  workAuthorization      Boolean?
+  reliableTransportation Boolean?
+
+  consentAt DateTime
+  status    ApplicationStatus @default(NEW)
+  source    String            @default("website")
+  notes     String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  job       Job       @relation(fields: [jobId], references: [id], onDelete: Restrict)
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Restrict)
 
   @@index([jobId, status])
   @@index([candidateId])
