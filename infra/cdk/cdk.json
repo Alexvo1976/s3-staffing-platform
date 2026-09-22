@@ -1,0 +1,13 @@
+{
+  "app": "node dist/bin/s3-staffing.js",
+  "context": {
+    "projectName": "s3-staffing",
+    "environment": "prod",
+    "domainName": "",
+    "hostedZoneId": "",
+    "repositoryUrl": "",
+    "branchName": "main",
+    "notificationEmail": "admin@example.com",
+    "apiDesiredCount": 1
+  }
+}

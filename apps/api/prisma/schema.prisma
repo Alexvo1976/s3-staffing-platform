@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
+enum ApplicationStatus {
+  NEW
+  REVIEWING
+  INTERVIEW
+  OFFER
+  HIRED
+  REJECTED
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CLOSED
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Job {
+  id               String        @id @default(cuid())
+  slug             String        @unique
+  title            String
+  summary          String
+  description      String
+  responsibilities String[]
+  qualifications   String[]
+  city             String
+  state            String
+  workplace        String
+  employmentType   String
+  industry         String
+  compensation     String?
+  featured         Boolean       @default(false)
+  status           JobStatus     @default(DRAFT)
+  publishedAt      DateTime?
+  closesAt         DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  applications     Application[]
+
+  @@index([status, publishedAt])
+  @@index([industry])
+  @@index([city, state])
+}
+
+model Candidate {
+  id           String        @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String
+  phone        String
+  city         String?
+  state        String?
+  linkedInUrl  String?
+  yearsExp     Int?
+  skills       String[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  applications Application[]
+
+  @@index([email])
+}
+
+model Application {
+  id              String            @id @default(cuid())
+  jobId           String
+  candidateId     String
+  coverLetter     String?
+  resumeObjectKey String
+  resumeFileName  String
+  consentAt       DateTime
+  status          ApplicationStatus @default(NEW)
+  source          String            @default("website")
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  job             Job               @relation(fields: [jobId], references: [id], onDelete: Restrict)
+  candidate       Candidate         @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+
+  @@index([jobId, status])
+  @@index([candidateId])
+}
+
+model TalentProfile {
+  id              String   @id @default(cuid())
+  firstName       String
+  lastName        String
+  email           String
+  phone           String
+  preferredRoles  String
+  preferredArea   String?
+  workPreference  String?
+  resumeObjectKey String
+  resumeFileName  String
+  consentAt       DateTime
+  createdAt       DateTime @default(now())
+
+  @@index([email])
+}
+
+model EmployerRequest {
+  id               String        @id @default(cuid())
+  companyName      String
+  contactName      String
+  email            String
+  phone            String
+  industry         String
+  rolesNeeded      String
+  headcount        Int
+  startTimeline    String
+  engagementType   String
+  additionalDetail String?
+  status           RequestStatus @default(NEW)
+  consentAt        DateTime
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status, createdAt])
+}

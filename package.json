@@ -1,0 +1,26 @@
+{
+  "name": "s3-staffing-platform",
+  "version": "2.0.0",
+  "private": true,
+  "engines": { "node": ">=24" },
+  "workspaces": ["apps/*", "infra/cdk"],
+  "scripts": {
+    "dev": "concurrently -n API,WEB -c cyan,blue \"dotenv -e .env -- npm run dev -w @s3/api\" \"dotenv -e .env -- npm run dev -w @s3/web\"",
+    "build": "npm run build -w @s3/api && npm run build -w @s3/web && npm run build -w @s3/infra",
+    "test": "npm run test -w @s3/api && npm run test -w @s3/web",
+    "test:e2e": "playwright test",
+    "test:smoke": "node scripts/smoke-test.mjs",
+    "lint": "npm run lint -w @s3/api && npm run lint -w @s3/web",
+    "db:migrate": "dotenv -e .env -- npm run prisma:migrate -w @s3/api",
+    "db:deploy": "dotenv -e .env -- npm run prisma:deploy -w @s3/api",
+    "db:seed": "dotenv -e .env -- npm run prisma:seed -w @s3/api",
+    "db:studio": "dotenv -e .env -- npm run prisma:studio -w @s3/api",
+    "infra:synth": "npm run synth -w @s3/infra",
+    "infra:deploy": "npm run deploy -w @s3/infra"
+  },
+  "devDependencies": {
+    "concurrently": "9.2.1",
+    "dotenv-cli": "8.0.0",
+    "@playwright/test": "1.63.0"
+  }
+}

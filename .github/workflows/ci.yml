@@ -1,0 +1,41 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: s3staffing
+          POSTGRES_USER: s3app
+          POSTGRES_PASSWORD: test-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U s3app -d s3staffing"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://s3app:test-password@localhost:5432/s3staffing?schema=public
+      AUTH_MODE: local
+      LOCAL_ADMIN_EMAIL: admin@example.test
+      LOCAL_ADMIN_PASSWORD: Test-password-123!
+      JWT_SECRET: test-secret-with-at-least-thirty-two-characters
+      WEB_ORIGIN: http://localhost:3000
+      AWS_REGION: us-east-1
+      S3_BUCKET: test-resumes
+      STORAGE_DRIVER: s3
+      EMAIL_DRIVER: smtp
+      EMAIL_FROM: careers@example.test
+      STAFF_NOTIFICATION_EMAIL: admin@example.test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm ci
+      - run: npm run db:deploy
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
