@@ -3,11 +3,11 @@
   "context": {
     "projectName": "s3-staffing",
     "environment": "prod",
-    "domainName": "",
-    "hostedZoneId": "",
-    "repositoryUrl": "",
+    "domainName": "s3-staffing.com",
+    "hostedZoneId": "Z05986111GENTRF2ENAZH",
+    "repositoryUrl": "https://github.com/Alexvo1976/s3-staffing-platform.git",
     "branchName": "main",
-    "notificationEmail": "admin@example.com",
+    "notificationEmail": "alexvillavicencio1976@yahoo.com",
     "apiDesiredCount": 1
   }
 }

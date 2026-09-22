@@ -150,6 +150,11 @@ export class S3StaffingStack extends cdk.Stack {
     const apiOrigin = customDomain ? `https://api.${domainName}/api/v1` : `http://${apiService.loadBalancer.loadBalancerDnsName}/api/v1`;
     const amplifyApp = new amplify.CfnApp(this, 'WebHosting', {
       name: `${prefix}-web`, platform: 'WEB_COMPUTE', repository: repositoryUrl || undefined,
+      accessToken: repositoryUrl
+        ? cdk.SecretValue.secretsManager(
+            's3-staffing/prod/amplify-github-token',
+          ).unsafeUnwrap()
+        : undefined,
       buildSpec: cdk.Fn.toJsonString({ version: 1, applications: [{ appRoot: 'apps/web', frontend: { phases: { preBuild: { commands: ['cd ../.. && npm ci'] }, build: { commands: ['npm run build -w @s3/web'] } }, artifacts: { baseDirectory: '.next', files: ['**/*'] }, cache: { paths: ['../../node_modules/**/*', '.next/cache/**/*'] } } }] }),
       environmentVariables: [
         { name: 'NEXT_PUBLIC_API_URL', value: apiOrigin }, { name: 'NEXT_PUBLIC_AUTH_MODE', value: 'cognito' },
@@ -160,7 +165,14 @@ export class S3StaffingStack extends cdk.Stack {
     const webBranch = new amplify.CfnBranch(this, 'WebBranch', { appId: amplifyApp.attrAppId, branchName, enableAutoBuild: Boolean(repositoryUrl), stage: 'PRODUCTION' });
     webBranch.addResourceDependency(amplifyApp);
     if (domainName && repositoryUrl) {
-      const webDomain = new amplify.CfnDomain(this, 'WebDomain', { appId: amplifyApp.attrAppId, domainName, subDomainSettings: [{ branchName, prefix: 'www' }] });
+      const webDomain = new amplify.CfnDomain(this, 'WebDomain', {
+        appId: amplifyApp.attrAppId,
+        domainName,
+        subDomainSettings: [
+          { branchName, prefix: '' },
+          { branchName, prefix: 'www' },
+        ],
+      });
       webDomain.addResourceDependency(webBranch);
     }
 

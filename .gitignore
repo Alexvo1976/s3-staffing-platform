@@ -37,3 +37,5 @@ coverage/
 # temp
 tmp/
 temp/
+# AWS CDK generated output
+infra/cdk/cdk.out/
