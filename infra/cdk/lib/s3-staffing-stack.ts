@@ -65,18 +65,23 @@ export class S3StaffingStack extends cdk.Stack {
           },
         },
       }),
+      inlinePolicies: {
+        FlowLogDelivery: new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              actions: [
+                'logs:CreateLogGroup',
+                'logs:CreateLogStream',
+                'logs:PutLogEvents',
+                'logs:DescribeLogGroups',
+                'logs:DescribeLogStreams',
+              ],
+              resources: ['*'],
+            }),
+          ],
+        }),
+      },
     });
-
-    vpcFlowLogRole.addToPolicy(new iam.PolicyStatement({
-      actions: [
-        'logs:CreateLogGroup',
-        'logs:CreateLogStream',
-        'logs:PutLogEvents',
-        'logs:DescribeLogGroups',
-        'logs:DescribeLogStreams',
-      ],
-      resources: ['*'],
-    }));
 
     vpc.addFlowLog('FlowLogs', {
       destination: ec2.FlowLogDestination.toCloudWatchLogs(
