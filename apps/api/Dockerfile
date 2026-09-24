@@ -21,10 +21,12 @@ WORKDIR /app
 
 COPY package*.json ./
 COPY apps/api/package.json apps/api/package.json
+COPY apps/api/prisma apps/api/prisma
 COPY apps/web/package.json apps/web/package.json
 COPY infra/cdk/package.json infra/cdk/package.json
 
-RUN npm ci --omit=dev --workspace=@s3/api --include-workspace-root
+RUN npm ci --omit=dev --workspace=@s3/api --include-workspace-root \
+    && node node_modules/prisma/build/index.js generate --schema apps/api/prisma/schema.prisma
 
 FROM node:24-alpine AS runtime
 
@@ -36,7 +38,6 @@ WORKDIR /app
 # hoisting them to the repository root. Both locations are required at runtime.
 COPY --from=production-deps /app/node_modules ./node_modules
 COPY --from=production-deps /app/apps/api/node_modules ./apps/api/node_modules
-COPY --from=build /app/apps/api/node_modules/.prisma ./apps/api/node_modules/.prisma
 COPY --from=build /app/apps/api/dist ./apps/api/dist
 COPY --from=build /app/apps/api/prisma ./apps/api/prisma
 COPY --from=build /app/apps/api/scripts ./apps/api/scripts
