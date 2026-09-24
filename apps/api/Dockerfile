@@ -36,6 +36,7 @@ WORKDIR /app
 # hoisting them to the repository root. Both locations are required at runtime.
 COPY --from=production-deps /app/node_modules ./node_modules
 COPY --from=production-deps /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=build /app/apps/api/node_modules/.prisma ./apps/api/node_modules/.prisma
 COPY --from=build /app/apps/api/dist ./apps/api/dist
 COPY --from=build /app/apps/api/prisma ./apps/api/prisma
 COPY --from=build /app/apps/api/package.json ./apps/api/package.json
