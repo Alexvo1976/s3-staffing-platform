@@ -39,10 +39,11 @@ COPY --from=production-deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=build /app/apps/api/node_modules/.prisma ./apps/api/node_modules/.prisma
 COPY --from=build /app/apps/api/dist ./apps/api/dist
 COPY --from=build /app/apps/api/prisma ./apps/api/prisma
+COPY --from=build /app/apps/api/scripts ./apps/api/scripts
 COPY --from=build /app/apps/api/package.json ./apps/api/package.json
 
 USER node
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "node node_modules/prisma/build/index.js migrate deploy --schema apps/api/prisma/schema.prisma && node apps/api/dist/main.js"]
+CMD ["sh", "-c", "node apps/api/scripts/migrate.mjs && exec node apps/api/dist/main.js"]
