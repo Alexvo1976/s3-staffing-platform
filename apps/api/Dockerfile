@@ -45,4 +45,4 @@ USER node
 
 EXPOSE 4000
 
-CMD ["node", "apps/api/dist/main.js"]
+CMD ["sh", "-c", "node node_modules/prisma/build/index.js migrate deploy --schema apps/api/prisma/schema.prisma && node apps/api/dist/main.js"]
