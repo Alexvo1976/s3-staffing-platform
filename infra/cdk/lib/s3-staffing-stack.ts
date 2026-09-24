@@ -438,9 +438,10 @@ export class S3StaffingStack extends cdk.Stack {
       environmentVariables: [
         { name: 'NEXT_PUBLIC_API_URL', value: apiOrigin },
         { name: 'NEXT_PUBLIC_AUTH_MODE', value: 'cognito' },
+        { name: 'AMPLIFY_MONOREPO_APP_ROOT', value: 'apps/web' },
         {
           name: 'NEXT_PUBLIC_COGNITO_AUTHORITY',
-          value: cognitoDomain.baseUrl(),
+          value: `https://cognito-idp.${this.region}.amazonaws.com/${userPool.userPoolId}`,
         },
         {
           name: 'NEXT_PUBLIC_COGNITO_CLIENT_ID',
@@ -456,6 +457,7 @@ export class S3StaffingStack extends cdk.Stack {
       branchName,
       enableAutoBuild: Boolean(repositoryUrl),
       stage: 'PRODUCTION',
+      framework: 'Next.js - SSR',
     });
     webBranch.addResourceDependency(amplifyApp);
 
