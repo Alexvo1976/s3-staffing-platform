@@ -38,16 +38,16 @@
 
 
 /* Keep navigation readable on the light header. */
-.nav-links > a:not(:last-child){
+.links > a:not(:last-child){
   color:#0b1f33 !important;
   font-weight:700;
   text-shadow:none
 }
 
-.nav-links > a:not(:last-child):hover{
+.links > a:not(:last-child):hover{
   color:#146ef5 !important
 }
 
-.nav-links > a:last-child{
+.links > a:last-child{
   color:#fff !important
 }
