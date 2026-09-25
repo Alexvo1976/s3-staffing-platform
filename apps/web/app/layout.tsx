@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+
+import Image from 'next/image';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -25,16 +27,18 @@ export default function RootLayout({
             className="shell nav"
             aria-label="Primary navigation"
           >
-            <Link className="brand" href="/">
-              <span className="brand-box">
-                S<sup>3</sup>
-              </span>
-
-              <span>
-                Superior Staffing
-                <br />
-                Solutions
-              </span>
+            <Link
+              className="brand brand-logo"
+              href="/"
+              aria-label="Superior Staffing Solutions home"
+            >
+              <Image
+                src="/images/s3-logo.png"
+                alt="Superior Staffing Solutions"
+                width={332}
+                height={189}
+                priority
+              />
             </Link>
 
             <div className="links">
@@ -71,17 +75,19 @@ export default function RootLayout({
         <footer className="footer">
           <div className="shell">
             <div className="footer-main">
-              <Link className="brand" href="/">
-                <span className="brand-box">
-                  S<sup>3</sup>
-                </span>
-
-                <span>
-                  Superior Staffing
-                  <br />
-                  Solutions
-                </span>
-              </Link>
+              <Link
+              className="brand brand-logo"
+              href="/"
+              aria-label="Superior Staffing Solutions home"
+            >
+              <Image
+                src="/images/s3-logo.png"
+                alt="Superior Staffing Solutions"
+                width={332}
+                height={189}
+                priority
+              />
+            </Link>
 
               <p>
                 Better matches.

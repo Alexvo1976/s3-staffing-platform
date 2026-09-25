@@ -2,3 +2,36 @@
 @media(max-width:900px){.topbar{position:relative;background:var(--navy)}.links a:not(.demo-btn){display:none}.demo-hero{height:auto;min-height:760px}.hero-photo{width:100%;opacity:.55}.hero-shade{background:linear-gradient(90deg,#021826ef,#02182666)}.hero-content{padding-top:140px;padding-bottom:260px}.hero-values{width:100%;grid-template-columns:1fr}.hero-values div{padding:15px 24px}.job-search-grid,.dual-path,.section-intro,.standard-section,.apply-grid,.job-detail,.employer-layout{grid-template-columns:1fr}.job-search-grid{gap:40px}.path-card{min-height:440px;padding-top:160px}.industry-grid{grid-template-columns:1fr 1fr}.standard-mark,.standard-copy{padding:70px 30px}.filters{grid-template-columns:1fr 1fr}.metric-grid{grid-template-columns:1fr 1fr}.admin-shell{grid-template-columns:1fr}.admin-nav{flex-direction:row;overflow:auto}.admin-nav button:last-child{margin:0 0 0 auto}.admin-content{padding:25px}}
 @media(max-width:560px){.shell{width:min(100% - 28px,1140px)}.brand-box{width:42px;height:42px}.demo-btn.small{font-size:.75rem;padding:9px 11px}.hero-content{padding-top:100px}.demo-hero h1{font-size:3rem}.hero-actions{align-items:flex-start;flex-direction:column}.search-grid,.industry-grid,.two,.check-grid,.filters,.metric-grid{grid-template-columns:1fr}.industry-card{border-right:0;border-bottom:1px solid var(--line)}.path-card h2{font-size:2.5rem}.apply-section{padding:75px 0}.job-row{align-items:flex-start;padding:22px}.circle-link{width:42px;height:42px;flex-basis:42px}.admin-page{padding-top:0}.admin-shell{min-height:100vh}.admin-nav{position:sticky;top:0;z-index:5}.admin-nav h2{display:none}.admin-content{padding:22px 14px}.footer-links{flex-wrap:wrap}}
 .admin-job-form{margin-bottom:24px}.admin-job-form textarea{min-height:85px}
+
+.brand-logo{
+  width:190px;
+  height:72px;
+  padding:2px 8px;
+  overflow:hidden;
+  justify-content:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 8px 24px rgba(0,0,0,.16)
+}
+.brand-logo img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain
+}
+.footer .brand-logo{
+  width:230px;
+  height:125px;
+  background:#fff
+}
+@media(max-width:560px){
+  .brand-logo{
+    width:136px;
+    height:58px;
+    padding:2px 5px
+  }
+  .footer .brand-logo{
+    width:190px;
+    height:105px
+  }
+}
