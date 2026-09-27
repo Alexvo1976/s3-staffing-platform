@@ -355,6 +355,12 @@ export class S3StaffingStack extends cdk.Stack {
             managedRuleGroupStatement: {
               vendorName: 'AWS',
               name: 'AWSManagedRulesCommonRuleSet',
+              ruleActionOverrides: [
+                {
+                  name: 'SizeRestrictions_BODY',
+                  actionToUse: { count: {} },
+                },
+              ],
             },
           },
           visibilityConfig: {
