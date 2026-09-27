@@ -31,6 +31,7 @@ export default function ApplicationForm({
 
     data.set('jobId', jobId);
     data.set('positionAppliedFor', jobTitle);
+    data.set('consent', 'true');
 
     try {
       await api('/applications', {
