@@ -27,11 +27,19 @@ export default function ApplicationForm({
     setState(null);
 
     const form = event.currentTarget;
-    const data = new FormData(form);
+    const formData = new FormData(form);
+    const data = new FormData();
 
-    data.set('jobId', jobId);
-    data.set('positionAppliedFor', jobTitle);
-    data.set('consent', 'true');
+    // Fastify receives multipart fields sequentially. Send the required
+    // control fields before the resume file.
+    data.append('jobId', jobId);
+    data.append('positionAppliedFor', jobTitle);
+    data.append('consent', 'true');
+
+    formData.forEach((value, key) => {
+      if (key === 'positionAppliedFor' || key === 'consent') return;
+      data.append(key, value);
+    });
 
     try {
       await api('/applications', {
