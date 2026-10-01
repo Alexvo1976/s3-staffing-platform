@@ -20,7 +20,7 @@ export default function TalentNetworkForm() {
     <label>Roles you’re interested in<input name="preferredRoles" required placeholder="Nursing, operations, classroom support…" /></label>
     <div className="two"><label>Preferred area<input name="preferredArea" placeholder="City, state, or remote" /></label><label>Work preference<select name="workPreference"><option value="">Choose one</option><option>On-site</option><option>Hybrid</option><option>Remote</option><option>Flexible</option></select></label></div>
     <label>Résumé (PDF, DOC, or DOCX; maximum 5 MB)<input name="resume" type="file" accept=".pdf,.doc,.docx" required /></label>
-    <label className="consent"><input name="consent" type="checkbox" value="true" required /><span>I consent to S3 storing this information and contacting me about employment opportunities.</span></label>
+    <label className="consent"><input name="consent" type="checkbox" value="true" required /><span>I consent to Superior Staffing Solutions storing this information and contacting me about employment opportunities.</span></label>
     <Notice state={state}/><button className="demo-btn" disabled={busy}>{busy ? 'Submitting…' : 'Join the talent network'} <span>→</span></button>
   </form>;
 }

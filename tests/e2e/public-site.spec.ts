@@ -4,7 +4,15 @@ test('home page exposes candidate and employer journeys', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Great people/i })).toBeVisible();
   await expect(page.getByRole('link', { name: /Explore opportunities/i })).toBeVisible();
-  await expect(page.getByRole('link', { name: /I’m hiring/i })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Request talent/i })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Solution Services/i })).toBeVisible();
+});
+
+test('solution services exposes practices and staffing models', async ({ page }) => {
+  await page.goto('/solutions');
+  await expect(page.getByRole('heading', { name: /Specialized people/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Contract Staffing/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Direct Hire/i })).toBeVisible();
 });
 
 test('seeded jobs are searchable and open a detail page', async ({ page }) => {
