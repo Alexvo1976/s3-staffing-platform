@@ -78,8 +78,20 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </div>
               <div className="footer-contact">
                 <h2>Contact</h2>
-                <p><strong>Corporate address</strong><br />To be confirmed · Chicago, Illinois</p>
-                <p><strong>Phone</strong><br />To be confirmed</p>
+                <p>
+                  <strong>Superior Staffing Solutions</strong><br />
+                  One Westbrook Corporate Center<br />
+                  Suite 300<br />
+                  Westchester, Illinois 60154
+                </p>
+                <p>
+                  <strong>Email</strong><br />
+                  <a href="mailto:Superior-staffing@outlook.com">Superior-staffing@outlook.com</a>
+                </p>
+                <p>
+                  <strong>Cell</strong><br />
+                  <a href="tel:+17083698511">708-369-8511</a>
+                </p>
               </div>
             </div>
 
