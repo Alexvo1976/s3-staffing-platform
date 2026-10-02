@@ -241,7 +241,7 @@ export class S3StaffingStack extends cdk.Stack {
         NODE_ENV: 'production',
         PORT: '4000',
         AUTH_MODE: 'cognito',
-        WEB_ORIGIN: customDomain ? `https://www.${domainName}` : '*',
+        WEB_ORIGIN: customDomain ? `https://${domainName},https://www.${domainName}` : '*',
         AWS_REGION: this.region,
         S3_BUCKET: resumes.bucketName,
         STORAGE_DRIVER: 's3',
