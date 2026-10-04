@@ -335,7 +335,9 @@ Superior Staffing Solutions`,
 
       this.email.send(
         process.env
-          .STAFF_NOTIFICATION_EMAIL!,
+          .APPLICATION_NOTIFICATION_EMAIL ??
+          process.env
+            .STAFF_NOTIFICATION_EMAIL!,
         'New S3 talent network profile',
         `${firstName} ${lastName} submitted a new talent-network profile for: ${preferredRoles}.`,
       ),
