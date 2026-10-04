@@ -18,14 +18,24 @@ export class EmailService {
   async applicationReceived(email: string, name: string, jobTitle: string) {
     await Promise.allSettled([
       this.send(email, `Application received — ${jobTitle}`, `Hi ${name},\n\nThank you for applying for ${jobTitle}. The S3 team will review your information and contact you if your experience matches the role.\n\nSuperior Staffing Solutions`),
-      this.send(process.env.STAFF_NOTIFICATION_EMAIL!, `New application — ${jobTitle}`, `${name} submitted a new application for ${jobTitle}. Sign in to the administrator portal to review it.`),
+      this.send(
+        process.env.APPLICATION_NOTIFICATION_EMAIL ??
+          process.env.STAFF_NOTIFICATION_EMAIL!,
+        `New application — ${jobTitle}`,
+        `${name} submitted a new application for ${jobTitle}. Sign in to the administrator portal to review it.`,
+      ),
     ]);
   }
 
   async employerRequestReceived(email: string, contactName: string, company: string) {
     await Promise.allSettled([
       this.send(email, 'Your S3 staffing request was received', `Hi ${contactName},\n\nThank you for contacting Superior Staffing Solutions. We received the staffing request for ${company} and will follow up shortly.`),
-      this.send(process.env.STAFF_NOTIFICATION_EMAIL!, `New employer request — ${company}`, `${contactName} submitted a staffing request for ${company}.`),
+      this.send(
+        process.env.EMPLOYER_NOTIFICATION_EMAIL ??
+          process.env.STAFF_NOTIFICATION_EMAIL!,
+        `New employer request — ${company}`,
+        `${contactName} submitted a staffing request for ${company}.`,
+      ),
     ]);
   }
 }
