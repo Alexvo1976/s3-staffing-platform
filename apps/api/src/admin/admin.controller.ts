@@ -160,6 +160,25 @@ export class AdminController {
     });
   }
 
+  @Get('talent-network/:id/resume')
+  async talentResume(
+    @Param('id') id: string,
+  ) {
+    const profile =
+      await this.prisma.talentProfile.findUniqueOrThrow({
+        where: {
+          id,
+        },
+      });
+
+    return {
+      url: await this.storage.signedDownload(
+        profile.resumeObjectKey,
+      ),
+      expiresIn: 300,
+    };
+  }
+
   @Get('talent-network')
   talentNetwork() {
     return this.prisma.talentProfile.findMany({
