@@ -7,7 +7,9 @@
     "hostedZoneId": "Z05986111GENTRF2ENAZH",
     "repositoryUrl": "https://github.com/Alexvo1976/s3-staffing-platform.git",
     "branchName": "main",
-    "notificationEmail": "alexvillavicencio1976@yahoo.com",
-    "apiDesiredCount": 1
+    "apiDesiredCount": 1,
+    "applicationNotificationEmail": "jobs@s3-staffing.com",
+    "employerNotificationEmail": "employers@s3-staffing.com",
+    "alarmNotificationEmail": "notifications@s3-staffing.com"
   }
 }
