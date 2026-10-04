@@ -84,6 +84,14 @@ class Environment {
   STAFF_NOTIFICATION_EMAIL!: string;
 
   @IsOptional()
+  @IsEmail()
+  APPLICATION_NOTIFICATION_EMAIL?: string;
+
+  @IsOptional()
+  @IsEmail()
+  EMPLOYER_NOTIFICATION_EMAIL?: string;
+
+  @IsOptional()
   @IsString()
   SMTP_HOST?: string;
 
