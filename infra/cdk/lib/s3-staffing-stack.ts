@@ -36,7 +36,21 @@ export class S3StaffingStack extends cdk.Stack {
     const hostedZoneId = String(this.node.tryGetContext('hostedZoneId') ?? '');
     const repositoryUrl = String(this.node.tryGetContext('repositoryUrl') ?? '');
     const branchName = String(this.node.tryGetContext('branchName') ?? 'main');
-    const notificationEmail = String(this.node.tryGetContext('notificationEmail') ?? '');
+    const legacyNotificationEmail = String(
+      this.node.tryGetContext('notificationEmail') ?? '',
+    );
+    const applicationNotificationEmail = String(
+      this.node.tryGetContext('applicationNotificationEmail') ??
+        legacyNotificationEmail,
+    );
+    const employerNotificationEmail = String(
+      this.node.tryGetContext('employerNotificationEmail') ??
+        legacyNotificationEmail,
+    );
+    const alarmNotificationEmail = String(
+      this.node.tryGetContext('alarmNotificationEmail') ??
+        legacyNotificationEmail,
+    );
     const desiredCount = Number(this.node.tryGetContext('apiDesiredCount') ?? 1);
     const customDomain = Boolean(domainName && hostedZoneId);
     const protectData = String(this.node.tryGetContext('protectData') ?? 'true') !== 'false';
@@ -246,8 +260,12 @@ export class S3StaffingStack extends cdk.Stack {
         S3_BUCKET: resumes.bucketName,
         STORAGE_DRIVER: 's3',
         EMAIL_DRIVER: 'ses',
-        EMAIL_FROM: domainName ? `careers@${domainName}` : notificationEmail,
-        STAFF_NOTIFICATION_EMAIL: notificationEmail,
+        EMAIL_FROM: domainName
+          ? `careers@${domainName}`
+          : applicationNotificationEmail,
+        STAFF_NOTIFICATION_EMAIL: applicationNotificationEmail,
+        APPLICATION_NOTIFICATION_EMAIL: applicationNotificationEmail,
+        EMPLOYER_NOTIFICATION_EMAIL: employerNotificationEmail,
         COGNITO_USER_POOL_ID: userPool.userPoolId,
         COGNITO_CLIENT_ID: userPoolClient.userPoolClientId,
         DB_HOST: database.clusterEndpoint.hostname,
@@ -396,9 +414,9 @@ export class S3StaffingStack extends cdk.Stack {
     const alarmTopic = new sns.Topic(this, 'AlarmTopic', {
       topicName: `${prefix}-alarms`,
     });
-    if (notificationEmail) {
+    if (alarmNotificationEmail) {
       alarmTopic.addSubscription(
-        new subscriptions.EmailSubscription(notificationEmail),
+        new subscriptions.EmailSubscription(alarmNotificationEmail),
       );
     }
     apiService.targetGroup.metrics
