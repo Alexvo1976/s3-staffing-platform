@@ -241,10 +241,10 @@ export class S3StaffingStack extends cdk.Stack {
     });
 
     const microsoftGraphClientSecret =
-      secretsmanager.Secret.fromSecretNameV2(
+      secretsmanager.Secret.fromSecretCompleteArn(
         this,
         'MicrosoftGraphClientSecret',
-        's3-staffing-prod/microsoft-graph-client-secret',
+        'arn:aws:secretsmanager:us-east-1:666809320045:secret:s3-staffing-prod/microsoft-graph-client-secret-sVSpqc',
       );
 
     const container = taskDefinition.addContainer('Api', {
