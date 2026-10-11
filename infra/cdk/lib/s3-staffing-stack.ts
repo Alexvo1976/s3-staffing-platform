@@ -16,6 +16,7 @@ import * as rds from 'aws-cdk-lib/aws-rds';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as ses from 'aws-cdk-lib/aws-ses';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
@@ -239,6 +240,13 @@ export class S3StaffingStack extends cdk.Stack {
       },
     });
 
+    const microsoftGraphClientSecret =
+      secretsmanager.Secret.fromSecretNameV2(
+        this,
+        'MicrosoftGraphClientSecret',
+        's3-staffing-prod/microsoft-graph-client-secret',
+      );
+
     const container = taskDefinition.addContainer('Api', {
       image: ecs.ContainerImage.fromAsset(
         path.resolve(currentDir, '../../../..'),
@@ -259,7 +267,9 @@ export class S3StaffingStack extends cdk.Stack {
         AWS_REGION: this.region,
         S3_BUCKET: resumes.bucketName,
         STORAGE_DRIVER: 's3',
-        EMAIL_DRIVER: 'ses',
+        EMAIL_DRIVER: 'microsoft-graph',
+        MICROSOFT_TENANT_ID: '024ecea2-beb6-4664-9ab7-5c6efed69bdf',
+        MICROSOFT_CLIENT_ID: '859577d0-4266-4dde-bab7-88e822ec6ae3',
         EMAIL_FROM: domainName
           ? `careers@${domainName}`
           : applicationNotificationEmail,
@@ -276,6 +286,7 @@ export class S3StaffingStack extends cdk.Stack {
       secrets: {
         DB_USER: ecs.Secret.fromSecretsManager(database.secret!, 'username'),
         DB_PASSWORD: ecs.Secret.fromSecretsManager(database.secret!, 'password'),
+        MICROSOFT_CLIENT_SECRET: ecs.Secret.fromSecretsManager(microsoftGraphClientSecret),
       },
       healthCheck: {
         command: [

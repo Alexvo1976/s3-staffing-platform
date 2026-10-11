@@ -74,7 +74,7 @@ class Environment {
   @Min(1024)
   MAX_RESUME_BYTES = 5_242_880;
 
-  @IsIn(['smtp', 'ses'])
+  @IsIn(['smtp', 'microsoft-graph'])
   EMAIL_DRIVER = 'smtp';
 
   @IsString()
