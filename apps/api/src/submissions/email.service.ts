@@ -1,8 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import nodemailer from 'nodemailer';
 
 @Injectable()
 export class EmailService {
+  private readonly logger = new Logger(EmailService.name);
+
+  private async sendAll(category: string, tasks: Promise<void>[]) {
+    const results = await Promise.allSettled(tasks);
+
+    results.forEach((result, index) => {
+      const recipient = index === 0 ? 'submitter' : 'staff mailbox';
+
+      if (result.status === 'fulfilled') {
+        this.logger.log(
+          `${category} email accepted for ${recipient}`,
+        );
+        return;
+      }
+
+      const message =
+        result.reason instanceof Error
+          ? result.reason.message
+          : String(result.reason);
+
+      this.logger.error(
+        `${category} email to ${recipient} failed: ${message}`,
+      );
+    });
+  }
+
   private async sendWithMicrosoftGraph(
     to: string,
     subject: string,
@@ -39,11 +65,21 @@ export class EmailService {
 
     const token = (await tokenResponse.json()) as {
       access_token?: string;
+      error?: string;
+      error_description?: string;
     };
 
     if (!tokenResponse.ok || !token.access_token) {
+      const details = [
+        token.error,
+        token.error_description,
+      ]
+        .filter(Boolean)
+        .join(': ')
+        .slice(0, 1000);
+
       throw new Error(
-        `Microsoft 365 token request failed (${tokenResponse.status})`,
+        `Microsoft 365 token request failed (${tokenResponse.status}): ${details}`,
       );
     }
 
@@ -80,8 +116,10 @@ export class EmailService {
     );
 
     if (!sendResponse.ok) {
+      const details = (await sendResponse.text()).slice(0, 1000);
+
       throw new Error(
-        `Microsoft 365 email delivery failed (${sendResponse.status})`,
+        `Microsoft 365 email delivery failed (${sendResponse.status}): ${details}`,
       );
     }
   }
@@ -111,7 +149,7 @@ export class EmailService {
     name: string,
     jobTitle: string,
   ) {
-    await Promise.allSettled([
+    await this.sendAll('application', [
       this.send(
         email,
         `Application received — ${jobTitle}`,
@@ -135,7 +173,7 @@ Superior Staffing Solutions`,
     contactName: string,
     company: string,
   ) {
-    await Promise.allSettled([
+    await this.sendAll('employer request', [
       this.send(
         email,
         'Your Superior Staffing Solutions request was received',
